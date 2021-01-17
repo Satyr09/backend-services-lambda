@@ -1,0 +1,37 @@
+[
+    {
+        "type": "PRODUCT",
+        "category": "EDIBLES",
+        "filters": [
+            {
+                "filterType": "CONSTRAINT",
+                "filterIp": "",
+                "filterOutput": [
+                    "COLD_STORAGE_REQUIRED"
+                ]
+            },
+            {
+                "filterType": "PRIORITIZATION",
+                "filterIp": "",
+                "filterOutput": [
+                    "KPI",
+                    "LOCATION"
+                ]
+            },
+            {
+                "filterType": "WHITELISTING",
+                "filterIp": "CUSTOMER_NAME",
+                "filterOutput": [
+                    "PREFERRED_PARTNERS"
+                ]
+            },
+            {
+                "filterType": "BLACKLISTING",
+                "filterIp": "CUSTOMER_NAME",
+                "filterOutput": [
+                    "LOCATION"
+                ]
+            }
+        ]
+    }
+]

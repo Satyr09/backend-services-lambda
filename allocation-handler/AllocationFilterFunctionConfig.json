@@ -1,0 +1,28 @@
+[
+    {
+        "filterType": "CONSTRAINT",
+        "filterName": "COLD_STORAGE_REQUIRED",
+        "funcName": "coldStorageRequired"
+    },
+    {
+        "filterType": "PRIORITIZATION",
+        "filterName": "KPI",
+        "funcName": "kpiPriority"
+    },
+    {
+        "filterType": "PRIORITIZATION",
+        "filterName": "LOCATION",
+        "funcName": "proximityPriority"
+    },
+    {
+        "filterType": "WHITELISTING",
+        "filterName": "PREFERRED_PARTNERS",
+        "funcName": "preferredPartnersWhitelisting"
+    },
+    {
+        "filterType": "BLACKLISTING",
+        "filterName": "LOCATION",
+        "funcName": "locationBlacklisting"
+
+    }
+]
