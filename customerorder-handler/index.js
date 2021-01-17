@@ -75,7 +75,7 @@ const writeCustomerOrder = async (orders) => {
     };
     
     console.log(params);
-    const _ = await DynamoDBClient.batchWrite(params).promise();
+    await DynamoDBClient.batchWrite(params).promise();
 
     await Promise.all(
         response.map(
@@ -110,7 +110,7 @@ const fetchCustomerOrderById = async orderId => {
     };
 
     const data = await DynamoDBClient.get(params).promise();
-    console.log(data , " " , orderId )
+    console.log(data , " " , orderId)
     return data;
 }
 
