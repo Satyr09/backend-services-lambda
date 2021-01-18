@@ -1,0 +1,18 @@
+{
+  "name": "broadcast-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.828.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "GoFlexe"
+  ],
+  "author": "Daipayan Mukherjee",
+  "license": "ISC"
+}
