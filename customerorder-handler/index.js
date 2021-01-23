@@ -15,20 +15,16 @@ exports.handler = async (event, context) => {
         "Access-Control-Allow-Headers": "*" 
     }
     const httpMethod = event.httpMethod;
-    const pathParameter = event.pathParameters;
-    const body = JSON.parse(event.body);
-
     console.log(httpMethod);
-    console.log(pathParameter)
 
     let responseData = null;
     try{
         switch (httpMethod) {
             case "GET":
-                responseData = await fetchCustomerOrder(pathParameter);
+                responseData = await fetchCustomerOrder(event.pathParameters);
                 break;
             case "POST":
-                responseData = await writeCustomerOrder(body);
+                responseData = await writeCustomerOrder(JSON.parse(event.body));
                 break;
             default:
                 throw new Error("Functionality unavailable.")
@@ -80,10 +76,11 @@ const writeCustomerOrder = async (orders) => {
     await Promise.all(
         response.map(
             async Item => {
+                console.log(Item)
                 const queueParams = {
                     MessageBody : JSON.stringify(Item),
                     QueueUrl : awsResourceConfigs.customerOrderQueue,
-                    MessageGroupId: Item.Orderid,
+                    MessageGroupId: Item.OrderId,
                     //MessageDeduplicationId: "1"
                 }
                 const info = await new SQS().sendMessage(queueParams).promise();
