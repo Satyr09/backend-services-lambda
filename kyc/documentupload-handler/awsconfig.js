@@ -1,4 +1,5 @@
-export const awsResourceConfigs = {
+const awsResourceConfigs = {
     region  : "ap-south-1",
-    documentStorageBucketname : "goflexekyc",
+    documentStorageBucketname : "goflexe-kyc",
 }
+module.exports = awsResourceConfigs;

@@ -7,31 +7,38 @@ const awsConfig = require("./awsconfig");
 
 const BUCKET_NAME = awsConfig.documentStorageBucketname;
 const documentStoragePath = "uploads/kycdocuments";
-
+const directorySuffixMap = {
+    "customer" : "customer",
+    "serviceprovider" : "serviceprovider"
+}
 
 /**
  * Send back a signed URL that the client can use to directly upload documents to S3 bucket
  */
 exports.handler = async (event) => {
-    const { body } = event;
-    const photoMetadata = {
+    const body = JSON.parse(event.body);
+
+    const type = event.queryStringParameters.type;
+    const directorySuffix = directorySuffixMap[type];
+
+    const fileMetadata = {
         contentType: body.contentType,
     };
-    console.log(photoMetadata);
-    const photoId = uuid.v4();
+
+    const fileId = uuid.v4();
     const req = {
         Bucket: BUCKET_NAME,
-        Key: `${documentStoragePath}/${photoId}.${mimes.extension(photoMetadata.contentType)}`,
-        ContentType: photoMetadata.contentType,
+        Key: `${documentStoragePath}/${directorySuffix}/${fileId}.${mimes.extension(fileMetadata.contentType)}`,
+        ContentType: fileMetadata.contentType,
         Metadata: {
-            ...photoMetadata,
-            photoId,
+            ...fileMetadata,
+            fileId,
         },
     };
     console.log(req);
     const s3PutObjectUrl = await s3.getSignedUrlPromise('putObject', req);
     const result = {
-        photoId,
+        fileId,
         s3PutObjectUrl,
     };
 
