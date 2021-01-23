@@ -1,6 +1,7 @@
-export const awsResourceConfigs = {
+const awsResourceConfigs = {
     region  : "ap-south-1",
-    configBucketName : "Configuration",
+    configBucketName : "goflexe-configuration",
     filterConfigMapping  : "AllocationFilterConfig.json",
     filterToFilterFunctionMapping : "AllocationFilterFunctionConfig.json"
 }
+module.exports = awsResourceConfigs;

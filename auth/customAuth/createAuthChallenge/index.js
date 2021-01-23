@@ -8,7 +8,7 @@ function generateRandomNumber (min, max) {
 exports.handler = async event => {
 
     let secretLoginCode;
-    const mobileNo = event.request.userAttributes.phone_number;//"+917003625198";
+    const mobileNo = event.request.userAttributes.phone_number;
     let res = "";
     if (!event.request.session || !event.request.session.length) {
 
