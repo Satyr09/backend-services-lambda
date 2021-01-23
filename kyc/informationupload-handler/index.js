@@ -4,7 +4,10 @@ const {process : customerKYCprocess } = require("./customerkyc");
 const DynamoDBClient = new DynamoDB.DocumentClient({
     "region" : "ap-south-1"
 })
-
+const KYCTypeMap = {
+    "customer" : "Customer",
+    "serviceprovider" : "ServiceProvider"
+}
 
 
 exports.handler = async (event) => {
@@ -30,7 +33,7 @@ exports.handler = async (event) => {
         Possibly separate into two different lambdas, or same lambda on two diff routes
         and then perform the switch on request path.    
     */
-    switch(data.type) {
+    switch(KYCTypeMap[data.type]) {
         case "Customer" :
             result = serviceProviderKYCprocess(data, DynamoDBClient);
             break;
@@ -40,7 +43,7 @@ exports.handler = async (event) => {
         default:
             return {
                 statusCode: 404,
-                body: JSON.stringify('type attribute must be specified as one of ServiceProvider or Customer'),
+                body: JSON.stringify('type attribute must be specified as one of serviceprovider or customer'),
                 headers
             };
     }
