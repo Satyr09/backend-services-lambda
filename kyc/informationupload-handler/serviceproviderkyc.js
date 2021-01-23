@@ -16,7 +16,7 @@ const process  = async (data, DynamoDBClient) => {
             id: data.id,
             lastModifiedAt: timestamp
     }
-    if(!existingInformation) {
+    if(Object.keys(existingInformation).length === 0) {
         newItem.createdAt = timestamp
     }
     const dynamodbParams = {
@@ -37,4 +37,4 @@ const process  = async (data, DynamoDBClient) => {
     
     return await DynamoDBClient.put(dynamodbParams).promise();
 }
-module.exports = process;
+module.exports = {process};

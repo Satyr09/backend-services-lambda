@@ -9,7 +9,6 @@ const KYCTypeMap = {
     "serviceprovider" : "ServiceProvider"
 }
 
-
 exports.handler = async (event) => {
     const headers = {
         "Access-Control-Allow-Origin" : "*",
@@ -34,11 +33,11 @@ exports.handler = async (event) => {
         and then perform the switch on request path.    
     */
     switch(KYCTypeMap[data.type]) {
-        case "Customer" :
-            result = serviceProviderKYCprocess(data, DynamoDBClient);
+        case "ServiceProvider" :
+            result = await serviceProviderKYCprocess(data, DynamoDBClient);
             break;
-        case "ServiceProvider":
-            result = customerKYCprocess(data, DynamoDBClient);
+        case "Customer":
+            result = await customerKYCprocess(data, DynamoDBClient);
             break;
         default:
             return {
