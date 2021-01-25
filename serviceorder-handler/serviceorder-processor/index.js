@@ -11,7 +11,7 @@ const TABLE_NAME = awsConfig.SERVICE_ORDER_TABLE_NAME;
 
 exports.handler = async (event, context) => {
     //const method = event.httpMethod;
-    const data = (event.body);
+    const data = JSON.parse(event.body);
     console.log(data);
     const headers = {
         "Access-Control-Allow-Origin": "*",
