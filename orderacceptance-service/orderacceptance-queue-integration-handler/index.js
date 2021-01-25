@@ -8,12 +8,10 @@ exports.handler = async (event) => {
     console.log("Request: " + JSON.stringify(event));
     const payload = JSON.parse(event.body);
 
-    console.log(payload);
     const Item = {
         customerOrderId: payload.orderId,
         serviceProviderId: payload.username
     }
-    console.log("PAYLOAD", payload)
     if (payload.email) {
         Item.email = payload.email;
     }
@@ -21,7 +19,6 @@ exports.handler = async (event) => {
         Item.phone = payload.phone;
     }
 
-    console.log("MESSAGE TO BE POSTED : ", Item)
     const queueParams = {
         MessageBody: JSON.stringify(Item),
         QueueUrl: awsConfig.ORDER_ACCEPTANCE_QUEUE_URL,

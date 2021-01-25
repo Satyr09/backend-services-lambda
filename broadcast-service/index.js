@@ -25,7 +25,7 @@ exports.handler = async function (event, context) {
     const formattedCustomerOrder = formatQueuePayload(customerOrder);
 
     const params = {
-        FunctionName: "AllocationHandler",
+        FunctionName: "allocation-handler",
         InvocationType: 'RequestResponse',
         LogType: "Tail",
         Payload: JSON.stringify({ body: formattedCustomerOrder })
@@ -42,7 +42,7 @@ exports.handler = async function (event, context) {
                 const providerId = partner.phoneNumber || partner.email;
                 const orderId = customerOrder.OrderId || "123456789";
                 const smsDeliveryInfo = await sendSMS(partner.phoneNumber, providerId, orderId);
-                //Fake email ids since we are temporarily utilising SES and SES requires email ids to be subscribed before they can be used.
+                //Fake email ids since we are temporarily utilising SES in sandbox mode and in sb mode SES requires email ids to be subscribed before they can be used.
                 const emailDeliveryInfo = await sendEmail('daipayan.mukherjee09@gmail.com', "daisatyr09@gmail.com", orderId, providerId)
                 returnData.push(smsDeliveryInfo);
                 returnData.push(emailDeliveryInfo);

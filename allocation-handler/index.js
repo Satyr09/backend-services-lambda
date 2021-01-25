@@ -6,15 +6,9 @@ const proximityPriority = require("./filters/prioritization/proximityPriority");
 const preferredPartnersWhitelisting = require("./filters/whitelisting/preferredPartnersWhitelisting");
 const awsConfig = require("./awsconfig")
 
-
 const s3Client =  new s3({
     "region" : awsConfig.region
 });
-
-
-/**
- * 3 levels of mapping, order type -> filters required [S3]. filters required -> actual filter function name [S3]. filter function name -> reference to filter function [Js].
- */
 
 const filterFunctionsMap = {
     "coldStorageRequired": coldStorageRequired,
@@ -29,10 +23,11 @@ const filterFunctionsMap = {
  * Run through the filters -> Send list of potential partners to 
  * broadcast module
  */
-module.exports = async (event, context) => {
-
-    const task = JSON.parse(event.body);
-    const filters = await findFilters(task);
+exports.handler = async (event, context) => {
+    
+    console.log(event.body.taskCategory, event.body.taskSubCategory)
+    //const task = JSON.parse(event.body);
+    const filters = await findFilters({taskCategory: event.body.taskCategory, taskSubCategory:event.body.taskSubCategory });
 
     //Get initial list of partners, intially while number of partners are limited, this will contain possibly all partners
     let partners = getInitialListOfPartners();
@@ -71,7 +66,7 @@ module.exports = async (event, context) => {
  * Get Map of which function to call for which function type
  * @param {taskObject} task 
  */
-const getFilterFunctions = (task) => {
+const getFilterFunctions = () => {
     return new Promise((resolve, reject) => {
         s3Client.getObject({
             Bucket: awsConfig.configBucketName,
@@ -79,23 +74,20 @@ const getFilterFunctions = (task) => {
         }, (err, data) => {
             if(err)
                 reject([])
-            const jsonData = JSON.parse(Buffer.from(data).toString("utf8"));
+            const jsonData = JSON.parse(data.Body.toString("utf8"));
 
             resolve(jsonData)
         })
     })
 
 }
-
-/**
- * Dummy set of vairables for now. 
- * TODO : Replace with actual calls to database based on Business Rules Discussion
- */
 const getInitialListOfPartners = () => {
 
     return [{
         "name": "FedEx",
         "coldStorage": true,
+        "phoneNumber": "+917003625198",
+        "email": "daipayan.mukherjee09@gmail.com"
     }]
 }
 
@@ -109,7 +101,8 @@ const findFilters = (task) => {
         }, (err, data) => {
             if(err)
                 reject(err);
-                const jsonData = JSON.parse(Buffer.from(data).toString("utf8"));
+                console.log(data);
+                const jsonData = JSON.parse(data.Body.toString("utf8"));
 
                 console.log(jsonData)
                 const filterSpecs = jsonData.find(
