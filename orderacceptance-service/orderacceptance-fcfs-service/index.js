@@ -1,4 +1,5 @@
 const AWS = require("aws-sdk")
+const uuid = require("uuid")
 const DynamoDB = new AWS.DynamoDB();
 const awsConfig = require("./awsconfig");
 
@@ -13,7 +14,8 @@ exports.handler = async (event, context) => {
     const dynamodbParams = {
         TableName: ORDER_ACCEPTANCE_DB,
         Item: {
-            "ServiceOrderId": {S : data.customerOrderId},
+            "ServiceOrderId": {S : uuid.v4()},
+            "customerOrderId" : {S : data.customerOrderId},
             "serviceProviderId": {S : data.serviceProviderId},
             "createdAt": {S : new Date().getTime().toString()}
         },
