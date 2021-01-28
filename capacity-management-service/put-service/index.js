@@ -26,7 +26,10 @@ const handler = async (event, DynamoDBClient, SERVICE_PROVIDER_TABLE) => {
         return formErrorResponse("Cannot change asset type", 403)
     }
 
+    const createdAtTimestamp = existingItem.createdAt;
     const newData = mapPayloadToDatabaseEntry(asset);
+    newData.createdAt = createdAtTimestamp;
+    
     const dynamoDBParams = {
         TableName : SERVICE_PROVIDER_TABLE,
         Item : newData,

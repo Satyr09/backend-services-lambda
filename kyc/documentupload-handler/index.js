@@ -30,10 +30,10 @@ exports.handler = async (event) => {
         Bucket: BUCKET_NAME,
         Key: `${documentStoragePath}/${directorySuffix}/${fileId}.${mimes.extension(fileMetadata.contentType)}`,
         ContentType: fileMetadata.contentType,
-        Metadata: {
-            ...fileMetadata,
-            fileId,
-        },
+        // Metadata: {
+        //     ...fileMetadata,
+        //     fileId,
+        // },
     };
     console.log(req);
     const s3PutObjectUrl = await s3.getSignedUrlPromise('putObject', req);

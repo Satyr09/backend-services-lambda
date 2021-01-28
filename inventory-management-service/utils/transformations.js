@@ -13,7 +13,9 @@ const mapDatabaseEntryToPayload = entry => {
         height: entry.height,
         weightPerUnit : entry.weightPerUnit,
         pincode : entry.pincode || null,
-        location: entry.productLocation || null
+        location: entry.productLocation || null,
+        createdAt: entry.createdAt,
+        lastModifiedAt: entry.lastModifiedAt
     }
     return data;
 }
@@ -30,7 +32,9 @@ const mapPayloadToDatabaseEntry = payload => {
         length: payload.length,
         weightPerUnit : payload.weightPerUnit,
         pincode : payload.pincode || null,
-        productLocation: payload.location || null
+        productLocation: payload.location || null,
+        createdAt : new Date().toString(),
+        lastModifiedAt: new Date().toString()
     }
 
     

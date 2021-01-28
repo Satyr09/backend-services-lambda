@@ -12,7 +12,9 @@ const mapDatabaseEntryToPayload = entry => {
         availableToDateTime: entry.availableToDateTime,
         ownershipType : entry.ownershipType,
         pincode : entry.pincode || null,
-        location: entry.assetLocation || null
+        location: entry.assetLocation || null,
+        createdAt: entry.createdAt,
+        lastModifiedAt: entry.lastModifiedAt
     }
     return data;
 }
@@ -31,7 +33,9 @@ const mapPayloadToDatabaseEntry = payload => {
         availableToDateTime: payload.availableToDateTime || timestampOneYear.toString(),
         ownershipType : payload.ownershipType,
         pincode : payload.pincode || null,
-        assetLocation: payload.location || null
+        assetLocation: payload.location || null,
+        createdAt : new Date().toString(),
+        lastModifiedAt: new Date().toString()
     }
 
     

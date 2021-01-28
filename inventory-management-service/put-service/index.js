@@ -22,11 +22,14 @@ const handler = async (event, DynamoDBClient, SERVICE_PROVIDER_TABLE) => {
     if(!existingItem) {
         return formErrorResponse("No such item exists", 404)
     }
-    if(existingItem.productType !== product.type) {
+    if(existingItem.productType !== product.productType) {
         return formErrorResponse("Cannot change product type", 403)
     }
 
+    const createdAtTimestamp = existingItem.createdAt;
     const newData = mapPayloadToDatabaseEntry(product);
+    newData.createdAt = createdAtTimestamp;
+    
     const dynamoDBParams = {
         TableName : SERVICE_PROVIDER_TABLE,
         Item : newData,

@@ -1,8 +1,14 @@
 const AWS = require("aws-sdk");
+const DynamoDB = require("aws-sdk/clients/dynamodb");
 AWS.config.region = 'ap-south-1';
 const lambda = new AWS.Lambda();
 const sendSMS = require("./communication-channels/sms");
 const sendEmail = require("./communication-channels/email");
+const uuid = require("uuid")
+const DynamoDBClient = new DynamoDB.DocumentClient({
+    region : "ap-south-1"
+})
+
 
 /**
  * Fake formatting since frontend client does not yet have ability to demarcate between different kinds of products in the order
@@ -32,24 +38,69 @@ exports.handler = async function (event, context) {
     }
 
     const data = await lambda.invoke(params).promise();
-    const partners = JSON.parse(data.Payload);
+    const payload = JSON.parse(data.Payload);
 
+    let partners = (JSON.parse(payload.body) || []);
+    partners = partners.slice(0,process.env.BROADCAST_LIMIT);
+
+    console.log(partners)
     const returnData = [];
+
+    const emailRecepients = [];
+    const phoneRecepients = [];
+    const receipients = [];
+
     await Promise.all(
-        JSON.parse(partners.body).map(
+        partners.map(
             async partner => {
                 console.log("Trying to send data : ", partner);
-                const providerId = partner.phoneNumber || partner.email;
+                const attributes = partner.Attributes;
+                const phoneNumber = attributes.find(attribute => attribute.name === "phone_number")
+                                    ? attributes.find(attribute => attribute.name === "phone_number").Value : "+917003625198";
+                const email = attributes.find(attribute => attribute.name === "email") ?
+                                    attributes.find(attribute => attribute.name === "email").Value : null;
+                const providerId = partner.Username;
+
+                const obj = {
+                    email,
+                    phoneNumber,
+                    userName : providerId
+                }
+                if(email)emailRecepients.push(email)
+                phoneRecepients.push(phoneNumber)
+                receipients.push(obj);
+
+                // const providerId = partner.phoneNumber || partner.email;
+
+                console.log(email, " ", phoneNumber, " ", providerId);
+
                 const orderId = customerOrder.OrderId || "123456789";
-                const smsDeliveryInfo = await sendSMS(partner.phoneNumber, providerId, orderId);
-                //Fake email ids since we are temporarily utilising SES in sandbox mode and in sb mode SES requires email ids to be subscribed before they can be used.
-                const emailDeliveryInfo = await sendEmail('daipayan.mukherjee09@gmail.com', "daisatyr09@gmail.com", orderId, providerId)
+                const smsDeliveryInfo = await sendSMS(phoneNumber, providerId, orderId);
+                //const emailDeliveryInfo = await sendEmail(orderId, providerId, email)
                 returnData.push(smsDeliveryInfo);
-                returnData.push(emailDeliveryInfo);
             }
         )
     )
+    const orderId = customerOrder.OrderId || "123456789"
+    const emailDeliveryInfo = await sendEmail(orderId,null,emailRecepients)
 
+
+
+    const databaseEntry = {
+        customerOrderId : customerOrder.OrderId,
+        broadcastOrderId : uuid.v4(),
+        receipients,
+        status : "PENDING"
+
+    }
+    const dynamoDBParams = {
+        TableName : "BroadcastOrder",
+        Item : databaseEntry
+    }
+    const response = await DynamoDBClient.put(dynamoDBParams).promise();
+
+    console.log("RESPONSE FROM DATABASE : ", response)
+    returnData.push(emailDeliveryInfo)
     context.succeed(returnData);
 }
 

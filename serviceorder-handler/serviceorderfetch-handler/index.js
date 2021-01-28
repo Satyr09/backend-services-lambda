@@ -31,7 +31,7 @@ exports.handler = async (event, context) => {
     } else if (event.queryStringParameters.username) {
         const params = {
             TableName: TABLE_NAME,
-            IndexName: "serviceProviderId-index",
+            IndexName: "serviceProviderIndex",
             KeyConditionExpression: 'serviceProviderId = :serviceProviderId',
             ExpressionAttributeValues: {
                 ':serviceProviderId': event.queryStringParameters.username,

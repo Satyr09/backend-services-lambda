@@ -1,4 +1,6 @@
 const s3 = require("aws-sdk/clients/s3");
+const AWS = require("aws-sdk");
+
 const locationBlacklisting = require("./filters/blacklisting/locationBlacklisting");
 const coldStorageRequired = require("./filters/constraint/coldStorageRequired");
 const kpiPriority = require("./filters/prioritization/kpiPriority");
@@ -6,8 +8,8 @@ const proximityPriority = require("./filters/prioritization/proximityPriority");
 const preferredPartnersWhitelisting = require("./filters/whitelisting/preferredPartnersWhitelisting");
 const awsConfig = require("./awsconfig")
 
-const s3Client =  new s3({
-    "region" : awsConfig.region
+const s3Client = new s3({
+    "region": awsConfig.region
 });
 
 const filterFunctionsMap = {
@@ -24,13 +26,13 @@ const filterFunctionsMap = {
  * broadcast module
  */
 exports.handler = async (event, context) => {
-    
+
     console.log(event.body.taskCategory, event.body.taskSubCategory)
     //const task = JSON.parse(event.body);
-    const filters = await findFilters({taskCategory: event.body.taskCategory, taskSubCategory:event.body.taskSubCategory });
+    const filters = await findFilters({ taskCategory: event.body.taskCategory, taskSubCategory: event.body.taskSubCategory });
 
     //Get initial list of partners, intially while number of partners are limited, this will contain possibly all partners
-    let partners = getInitialListOfPartners();
+    let partners = await getInitialListOfPartners();
     //We maintain a map of (filterType, filterOutput) ---> nameOfCorrespondingFilterFunctioon, here, we retrieve that map
     const filterFunctions = await getFilterFunctions();
 
@@ -50,13 +52,13 @@ exports.handler = async (event, context) => {
     });
 
     const headers = {
-        "Access-Control-Allow-Origin" : "*",
-        "Access-Control-Allow-Headers": "*" 
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*"
     }
     const response = {
-        "statusCode" : 200,
-        "body" : JSON.stringify(partners),
-        "headers" : headers
+        "statusCode": 200,
+        "body": JSON.stringify(partners),
+        "headers": headers
     }
     return response;
     //place final list of suitable entities for task into queue, to be picked up by broadcasting service or someone else
@@ -72,7 +74,7 @@ const getFilterFunctions = () => {
             Bucket: awsConfig.configBucketName,
             Key: awsConfig.filterToFilterFunctionMapping
         }, (err, data) => {
-            if(err)
+            if (err)
                 reject([])
             const jsonData = JSON.parse(data.Body.toString("utf8"));
 
@@ -81,14 +83,32 @@ const getFilterFunctions = () => {
     })
 
 }
-const getInitialListOfPartners = () => {
+const getInitialListOfPartners = async () => {
 
-    return [{
-        "name": "FedEx",
-        "coldStorage": true,
-        "phoneNumber": "+917003625198",
-        "email": "daipayan.mukherjee09@gmail.com"
-    }]
+    const cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider({
+        apiVersion: '2016-04-18',
+        region: awsConfig.region,
+    });
+    const params = {
+        UserPoolId: awsConfig.userPoolId, /* required */
+        // AttributesToGet: [
+        //     "email"
+        // ]
+    };
+    const data = await cognitoidentityserviceprovider.listUsers(params).promise();
+    data.Users.forEach(
+        User => console.log(User.Attributes)
+    )
+    console.log(data)
+
+    // return [{
+    //     "name": "FedEx",
+    //     "coldStorage": true,
+    //     "phoneNumber": "+917003625198",
+    //     "email": "daipayan.mukherjee09@gmail.com"
+    // }]
+
+    return data.Users;
 }
 
 
@@ -99,20 +119,19 @@ const findFilters = (task) => {
             Bucket: awsConfig.configBucketName,
             Key: awsConfig.filterConfigMapping
         }, (err, data) => {
-            if(err)
+            if (err)
                 reject(err);
-                console.log(data);
-                const jsonData = JSON.parse(data.Body.toString("utf8"));
+            console.log(data);
+            const jsonData = JSON.parse(data.Body.toString("utf8"));
 
-                console.log(jsonData)
-                const filterSpecs = jsonData.find(
-                    item => item.type == task.taskCategory && 
+            console.log(jsonData)
+            const filterSpecs = jsonData.find(
+                item => item.type == task.taskCategory &&
                     item.category == task.taskSubCategory);
-    
-                if(!filterSpecs)
-                    reject(null);
-                resolve(filterSpecs.filters); 
-        }) ;
+
+            if (!filterSpecs)
+                reject(null);
+            resolve(filterSpecs.filters);
+        });
     })
 }
-  

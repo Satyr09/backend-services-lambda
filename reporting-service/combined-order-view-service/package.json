@@ -1,15 +1,8 @@
 {
-  "name": "broadcast-service",
+  "name": "combined-order-view-service",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "dependencies": {
-    "@sendgrid/mail": "^7.4.2",
-    "aws-sdk": "^2.828.0",
-    "twilio": "^3.55.1",
-    "uuid": "^8.3.2"
-  },
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,5 +10,8 @@
     "GoFlexe"
   ],
   "author": "Daipayan Mukherjee",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "aws-sdk": "^2.831.0"
+  }
 }
