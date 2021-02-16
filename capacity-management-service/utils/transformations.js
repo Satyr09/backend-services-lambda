@@ -6,6 +6,7 @@ const mapDatabaseEntryToPayload = entry => {
         owner : entry.ownerId,
         type: entry.assetType,
         assetId : entry.assetId,
+        assetNumber: entry.assetNumber,
         capabilities : entry.capabilities || [],
         capacity: entry.capacity,
         availableFromDateTime : entry.availableFromDateTime,
@@ -27,6 +28,7 @@ const mapPayloadToDatabaseEntry = payload => {
     const data =  {
         ownerId : payload.owner,
         assetType: payload.type,
+        assetNumber: payload.assetNumber,
         capabilities : payload.capabilities || [],
         capacity: payload.capacity,
         availableFromDateTime : payload.availableFromDateTime || timestamp.toString(),

@@ -32,15 +32,15 @@ sendGridEmailClient.setApiKey(process.env.SENDGRID_EMAIL_API_KEY);
 const defaultSender = "daipayan@goflexe.com"
 
 const sendEmail = async (orderId, providerId, receipient, sender = defaultSender) => {
-    const acceptanceLink = "http://localhost:3001/accept-order/" + `?orderId=${orderId}`;
+    const acceptanceLink = "https://serviceprovider.goflexe.com/#/accept-order/" + `${orderId}`;
+    console.log(receipient)
     const msg = {
-        to : ["daipayan@goflexe.com"],
-        cc : receipient,
+        to : receipient,
         from: sender,
         subject: subjectTemplates.NEW_ORDER,
         text: bodyTemplates.NEW_ORDER_ACCEPTANCE_PROMPT + acceptanceLink
     }
-    return await sendGridEmailClient.send(msg)
+    return await sendGridEmailClient.sendMultiple(msg)
 }
 
 module.exports = sendEmail;

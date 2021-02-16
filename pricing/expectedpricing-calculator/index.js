@@ -14,6 +14,14 @@ const formErrorResponse = (message , statusCode = 501) => {
         headers : headers
     }
 }
+const formOkResponse = response => {
+    return {
+        statusCode : 200,
+        body : JSON.stringify({estimatedPrice : response}),
+        headers : headers
+    }
+}
+
 
 const getDistance = (toPin, fromPin) => {
     //access google maps - very accurate and easily accessible, but paid/mapbox - free but not sure yet if it serves our purpose yet
@@ -61,56 +69,73 @@ const getPricingFromDistanceAndWeight = async (distance, weight) => {
     //access pricing config
     return 5.5;
 }
-
-exports.handler = async (event, context) => {
-
-    let price = 10;
-
-    if(!validateParameters(event.queryStringParameters)) {
-        return formErrorResponse("Parameters missing or incorrect", 403);
-    }
-    
-    const toPin = event.queryStringParameters.toPin;
-    const fromPin = event.queryStringParameters.fromPin;
+const estimateItemPrice = async item => {
+    const toPin = item.toPin;
+    const fromPin = item.fromPin;
     
     const distance = getDistance(toPin, fromPin);
 
-    if(event.queryStringParameters.measureable === 'true') {
+    if(item.measureable === 'true') {
     
-        const length = event.queryStringParameters.length || 1;
-        const width = event.queryStringParameters.width || 1;
-        const height = event.queryStringParameters.height || 1;
+        const length = item.length || 1;
+        const width = item.width || 1;
+        const height = item.height || 1;
 
         const volumetricWeight = Math.round(length * width * height * 2)/2.0;
         console.log(volumetricWeight, " volum wt")
-        price = volumetricWeight * distance * (await getPricingFromDistanceAndWeight(distance, volumetricWeight));
-        console.log(price)
+        const itemPrice = volumetricWeight * distance * (await getPricingFromDistanceAndWeight(distance, volumetricWeight));
+        console.log(itemPrice)
+        return itemPrice;
     } else {
-        const totalWeight = event.queryStringParameters.totalWeight;
-        const density = event.queryStringParameters.density;
+        const totalWeight = item.totalWeight;
+        //const density = item.density;
 
-        price = totalWeight * distance * (await getPricingFromDistanceAndWeight(distance, totalWeight));
+        const itemPrice = totalWeight * distance * (await getPricingFromDistanceAndWeight(distance, totalWeight));
+        return itemPrice;
 
     }
+}
+exports.handler = async (event, context) => {
 
-    return formOkResponse(price);
+    let totalPrice = 0;
+
+    const items = JSON.parse(event.queryStringParameters.items);
+    let areItemsValid = true;
+    items.forEach(item => {
+        console.log(item);
+        if(!validateParameters(item))
+            areItemsValid = false;
+    });
+
+    if(!areItemsValid)
+        return formErrorResponse("Parameters missing or incorrect", 403);
+
+
+    const promiseList = items.map(async item => {
+        const itemPrice = await estimateItemPrice(item);
+        totalPrice += itemPrice;
+    })
+
+    await Promise.all(promiseList);
+    return formOkResponse(totalPrice);
 }
-const formOkResponse = response => {
-    return {
-        statusCode : 200,
-        body : JSON.stringify({estimatedPrice : response}),
-        headers : headers
-    }
-}
-const validateParameters = (queryStringParameters) => {
-    if(!queryStringParameters.toPin || !queryStringParameters.fromPin)
+
+const validateParameters = (item) => {
+    if(!item.toPin || !item.fromPin) {
+        console.log("Missing source and destination pins")
         return false;
-    if(queryStringParameters.measureable !== 'true') {
-        if(!queryStringParameters.totalWeight || !queryStringParameters.density)
-            return false
-    } else {
-        if(!queryStringParameters.length || !queryStringParameters.height || !queryStringParameters.width)
+    }
+    if(item.measureable !== 'true' && item.measureable != true) {
+        console.log("Not measureable")
+        if(!item.totalWeight || !item.density) {
+            console.log("Missing weght and density")
             return false;
+        }
+    } else {
+        if(!item.length || !item.height || !item.width) {
+            console.log("Missing dimensions")
+            return false;
+        }
     }
     return true;
 }
