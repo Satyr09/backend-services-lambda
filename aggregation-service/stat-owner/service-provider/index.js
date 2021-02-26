@@ -7,7 +7,7 @@ class ServiceProvider {
 
     }
     async getOrderStats (documentClient, params) {
-        console.log("Fetching order stats for : ", params)
+        console.log("Fetching sp order stats for : ", params)
         const broadcastOrders = await getBroadcastOrderForSP(documentClient, params.serviceProviderId);
         const serviceOrders = await getServiceOrdersForSP(documentClient, params.serviceProviderId);
 
@@ -22,21 +22,25 @@ class ServiceProvider {
         let serviceOrdersDelayedCount = 0;
         //Damaged count
         let serviceOrdersDamagedCount = 0;
+        //In Transit count
+        let serviceOrdersInTransitCount = 0;
 
 
         broadcastOrders.forEach(broadcastOrder => {
-            if (broadcastOrder.receipients.includes(params.serviceProviderId))
+            if (broadcastOrder.receipients && broadcastOrder.receipients.includes(params.serviceProviderId))
                 ++broadcastOrdersCount;
         })
 
         serviceOrders.forEach(
             serviceOrder => {
-                if (serviceOrder.trackingStatus === "FULFILLED")
+                if (serviceOrder.trackingstatus === "FULFILLED")
                     ++serviceOrdersFulfilledCount;
-                if (serviceOrder.isDelayed === "YES")
+                if (serviceOrder.isdelayed === "YES")
                     ++serviceOrdersDelayedCount;
-                if (serviceOrder.isDamaged === "YES")
+                if (serviceOrder.isdamaged === "YES")
                     ++serviceOrdersDamagedCount;
+                if(serviceOrder.trackingstatus === "IN_TRANSIT")
+                    ++serviceOrdersInTransitCount;
             }
         )
 
@@ -45,7 +49,8 @@ class ServiceProvider {
             serviceOrdersAcceptedCount: serviceOrdersCount,
             serviceOrdersFulfilledCount,
             serviceOrdersDamagedCount,
-            serviceOrdersDelayedCount
+            serviceOrdersDelayedCount,
+            serviceOrdersInTransitCount
         }
 
         return stats;

@@ -1,4 +1,4 @@
-const { getDynamoDBScannedDataPaginated } = require("../../../utils/ddb-pagination")
+const { getDynamoDBQueriedDataPaginated } = require("../../../utils/ddb-pagination")
 
 const getCustomerOrderForCustomer = async (documentClient, params) => {
     const ddbParams = {
@@ -9,7 +9,7 @@ const getCustomerOrderForCustomer = async (documentClient, params) => {
           ':customerEmail': params.customerId
         }
     }
-    const customerOrders = await getDynamoDBScannedDataPaginated(documentClient, ddbParams);
+    const customerOrders = await getDynamoDBQueriedDataPaginated(documentClient, ddbParams);
     console.log("Customer order query result :  ", customerOrders)
     return customerOrders;
 }

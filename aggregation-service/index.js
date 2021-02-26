@@ -33,8 +33,12 @@ const formOKResponse = (response, statusCode = 200) => {
 exports.handler = async (event, context) => {
 
     console.log(context)
+    console.log(event)
+    console.log("------------BODY-------------------")
+    console.log(event.body)
     const body = JSON.parse(event.body);
 
+    console.log("Request received : ", body)
 
     switch (body.type) {
         case "all" :

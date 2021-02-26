@@ -1,4 +1,4 @@
-const { getCustomerOrderForCustomer } = require("../../customerorder");
+const { getCustomerOrderForCustomer } = require("../../datastore/ddb/customerorder");
 const { getCustomerOrderAndServiceOrderJoins } = require("../../datastore/athena/orders");
 
 
@@ -7,7 +7,7 @@ class Customer {
 
     }
     async getOrderStats (documentClient, params) {
-        console.log("Fetching order stats for : ", params)
+        console.log("Fetching customer order stats for : ", params)
         const acceptedOrderDetails = await getCustomerOrderAndServiceOrderJoins(params.customerId); //Athena
         const placedOrderDetails = await getCustomerOrderForCustomer(documentClient, params); //DDB
 
@@ -21,17 +21,21 @@ class Customer {
         let customerOrdersDelayedCount = 0;
         //Damaged count
         let customerOrdersDamagedCount = 0;
+        //In Transit count
+        let customerOrdersInTransitCount = 0;
 
 
         acceptedOrderDetails.forEach(
             customerOrder => {
                 console.log(customerOrder)
-                if (customerOrder.trackingStatus === "FULFILLED")
+                if (customerOrder.trackingstatus === "FULFILLED")
                     ++customerOrdersFulfilledCount;
-                if (customerOrder.isDelayed === "YES")
+                if (customerOrder.isdelayed === "YES")
                     ++customerOrdersDelayedCount;
-                if (customerOrder.isDamaged === "YES")
+                if (customerOrder.isdamaged === "YES")
                     ++customerOrdersDamagedCount;
+                if(customerOrder.trackingstatus === "IN_TRANSIT")
+                    ++customerOrdersInTransitCount;
             }
         )
 
@@ -40,7 +44,8 @@ class Customer {
             customerOrdersAcceptedCount: acceptedOrdersCount,
             customerOrdersFulfilledCount,
             customerOrdersDamagedCount,
-            customerOrdersDelayedCount
+            customerOrdersDelayedCount,
+            customerOrdersInTransitCount
         }
 
         return stats;

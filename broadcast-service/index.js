@@ -88,7 +88,7 @@ exports.handler = async function (event, context) {
                 }
                 if(email)emailRecepients.push(email)
                 phoneRecepients.push(phoneNumber)
-                receipients.push(obj);
+                receipients.push(providerId);
 
                 // const providerId = partner.phoneNumber || partner.email;
 

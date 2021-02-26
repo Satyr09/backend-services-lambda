@@ -10,7 +10,7 @@ const athenaExpress = new AthenaExpress({
 });
 
 const getCustomerOrderAndServiceOrderJoins = async (customerId) => {
-    const sqlQuery = "select * from customerorder co inner join serviceorder so on co.orderid = so.customerorderid where co.customerEmail = "+customerId+";";
+    const sqlQuery = "select * from customerorder co inner join serviceorder so on co.orderid = so.customerorderid where co.customerEmail = '"+customerId+"';";
 
     //try {
     const results = await athenaExpress.query(sqlQuery);

@@ -1,16 +1,16 @@
 const { getDynamoDBQueriedDataPaginated} = require("../../../utils/ddb-pagination")
 
-const getServiceOrdersForSP = async (documentClient, params) => {
+const getServiceOrdersForSP = async (documentClient, serviceProviderId) => {
     const ddbParams = {
         TableName: 'ServiceOrder',
         IndexName: 'serviceProviderIndex',
         KeyConditionExpression: 'serviceProviderId = :serviceProviderId',
         ExpressionAttributeValues: {
-          ':serviceProviderId': params.serviceProviderId
+          ':serviceProviderId': serviceProviderId
         }
       };
     const allServiceOrders = await getDynamoDBQueriedDataPaginated(documentClient, ddbParams);
-    console.log("Broadcast order scan result :  ", allServiceOrders)
+    console.log("ServiceOrder query result :  ", allServiceOrders)
 
     return allServiceOrders;
 }

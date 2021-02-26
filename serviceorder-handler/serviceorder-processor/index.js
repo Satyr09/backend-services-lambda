@@ -2,7 +2,7 @@ const DynamoDB = require("aws-sdk/clients/dynamodb");
 //const { v4: uuidv4 } = require('uuid');
 const awsConfig = require("./awsconfig");
 
-const DynamoDBClient = new DynamoDB.DocumentClient({
+const documentClient = new DynamoDB.DocumentClient({
     "region": awsConfig.REGION
 })
 
@@ -60,7 +60,7 @@ exports.handler = async (event, context) => {
 
 //     return new Promise((resolve, reject) => {
 
-//         DynamoDBClient.put(params, (err, data) => {
+//         DocumentClient.put(params, (err, data) => {
 //             if(err)
 //                 reject(err)
 //             else {
@@ -80,20 +80,62 @@ const handleExistingServiceOrder = async data => {
     console.log(params)
     delete data.serviceOrderId;
 
-    const existingData = await DynamoDBClient.get(params).promise();
+    const existingData = await documentClient.get(params).promise();
     const newData = {
         ...(existingData.Item),
         ...data
     }
 
-    console.log("EXISTING DATA ", existingData)
-    console.log("NEW DATA ", newData);
-    const putPayload = {
-        TableName: TABLE_NAME,
-        Item: newData
-    };
-
-    const response = await DynamoDBClient.put(putPayload).promise();
-    return response;
+    try{
+        if(data.trucks) {
+            return await handleServiceOrderWithCapacityUpdate(newData);
+        } else {
+            console.log("EXISTING DATA ", existingData)
+            console.log("NEW DATA ", newData);
+            const putPayload = {
+                TableName: TABLE_NAME,
+                Item: newData
+            }; 
+            return await documentClient.put(putPayload).promise();
+        }
+    } catch(err) {
+        console.log(err);
+    }
+    
 }
 
+const handleServiceOrderWithCapacityUpdate = async data => {    
+
+    const transactItems = data.trucks.map(
+        truck => {
+            return {
+                Update : {
+                    TableName : "ServiceProviderCapacity",
+                    Key : {"ownerId": truck.ownerId, "assetType_assetId" : truck.assetType_assetId},
+                    UpdateExpression : 'set #capacity = #capacity - :capacityUsed',
+                    ConditionExpression: '#capacity >= :capacityUsed',
+                    ExpressionAttributeNames : {"#capacity" : "capacity"},
+                    ExpressionAttributeValues : {":capacityUsed" : truck.capacityUsed}
+                }
+            }
+        }
+    )
+    const serviceOrderdata = {...data};
+    serviceOrderdata.trucks.forEach(truck => {
+        delete truck.assetType_assetId;
+        delete truck.ownerId;
+    });
+    
+
+    transactItems.push({
+        Put :{
+            TableName: TABLE_NAME,
+            Item: serviceOrderdata
+        }
+    })
+    const params = {
+        TransactItems: transactItems
+    };
+      
+    return await documentClient.transactWrite(params).promise();
+}
