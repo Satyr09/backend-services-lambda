@@ -1,0 +1,20 @@
+{
+  "name": "process-management-service",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "aws-sdk": "^2.852.0",
+    "claudia-api-builder": "^4.1.2",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "GoFlexe"
+  ],
+  "author": "Daipayan Mukherjee",
+  "license": "ISC"
+}
