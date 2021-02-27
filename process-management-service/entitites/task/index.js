@@ -43,7 +43,7 @@ const updateCustomFields = async (task,payload)=> {
     if(payload.data) {
         newCustomFields.data = {
             ...newCustomFields.data,
-            ...payload.date
+            ...payload.data
         }
 
         const triggers = task.customDataUpdateTriggers;
