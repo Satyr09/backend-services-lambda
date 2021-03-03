@@ -47,6 +47,7 @@ const changeTaskStatusInStage = async (stage, taskId, status) => {
         if(isStageCompletable(newStage)) {
             newStage.status = "COMPLETED"
         }
+        newStage.lastModifiedAt = new Date().toUTCString();
         return newStage;
     } else {
         throw new Error("Incorrect task specified")
@@ -78,6 +79,7 @@ const activateTaskInStage = async (stage, taskId) => {
         if(isStageCompletable(newStage)) {
             newStage.status = "COMPLETED"
         }
+        newStage.lastModifiedAt = new Date().toUTCString();
         return newStage;
     } else {
         throw new Error("Incorrect task specified")
@@ -122,6 +124,7 @@ const updateCustomFieldsForTaskinStage = async (stage, taskId,payload)=> {
         if(isStageCompletable(newStage)) {
             newStage.status = "COMPLETED"
         }
+        newStage.lastModifiedAt = new Date().toUTCString();
         return newStage;
     } else {
         throw new Error("Incorrect task specified")
@@ -132,14 +135,31 @@ const activateStage = async stage => {
     const initStatus = stage.initstatus || "PENDING";
     stage.status = initStatus;
 
-    const triggers = stage.triggers[stage.status];
+    const timeNow = new Date().toUTCString();
+    stage.activatedAt = timeNow;
+
+    const firstTask = stage.tasks[0];
+    const newTask = await activateTask(firstTask);
+    let newStage = {
+        ...stage,
+        tasks : stage.tasks.map(
+            task => {
+                if(task.taskId === firstTask.taskId)
+                    return newTask;
+                return task;
+            }
+        )
+    }
+
+
+    const triggers = newStage.triggers[stage.status];
     const promiseList = triggers.forEach(async trigger => {
         console.log(trigger);
     })
     await Promise.all(promiseList);
 
-    stage.lastUpdatedAt = new Date().toUTCString();
-    return stage;
+    newStage.lastModifiedAt = timeNow;
+    return newStage;
 }
 
 

@@ -6,7 +6,7 @@ const changeStatus = async (task, status) => {
 
     if(newStatus && validTransitions[currStatus][0] === newStatus) {
         task.status = newStatus;
-        task.lastUpdatedAt = new Date().toUTCString();
+        task.lastModifiedAt = new Date().toUTCString();
 
         const triggers = task.triggers[task.status];
         const promiseList = triggers.forEach(async trigger => {
@@ -32,12 +32,12 @@ const activateTask = async task => {
     })
     await Promise.all(promiseList);
 
-    task.lastUpdatedAt = new Date().toUTCString();
+    task.lastModifiedAt = new Date().toUTCString();
     return task;
 }
 
 const updateCustomFields = async (task,payload)=> {
-    const oldCustomFields = task.customFields;
+    //const oldCustomFields = task.customFields;
     const newCustomFields = task.customFields;
 
     if(payload.data) {
@@ -66,7 +66,7 @@ const updateCustomFields = async (task,payload)=> {
         await Promise.all(promiseList);
     }
 
-    task.lastUpdatedAt = new Date().toUTCString();
+    task.lastModifiedAt = new Date().toUTCString();
 
     return task;
 }

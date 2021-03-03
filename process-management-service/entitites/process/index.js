@@ -157,17 +157,45 @@ const createProcess = async payload => {
         processType : type
     });
 
+    const timeNow = new Date().toUTCString();
+
     const newProcess = {
         ...template,
         processId : uuid.v4(),
         principal : payload.user,
-        createdAt : new Date().toUTCString(),
-        lastModifiedAt : new Date().toUTCString(),
+        createdAt : timeNow,
+        lastModifiedAt : timeNow,
     }
+    newProcess.stages.forEach(
+        stage => {
+            stage.stageId = uuid.v4();
+            stage.tasks.forEach(
+                task => {
+                    task.taskId = uuid.v4()
+                }
+            )
+        }
+    )
+
+    const initStage = newProcess.stages[0];
+    const newStage = await activateStage(initStage);
+
+
+    let activatedProcess = {
+        ...process,
+        stages : process.stages.map(
+            stage => {
+                if(stage.stageid === newStage.stageId)
+                    return newStage;
+                return stage;
+            }
+        )
+    }
+    
     try {
-        const res = await createNewProcess(newProcess);
+        const res = await createNewProcess(activatedProcess);
         console.log(res)
-        return newProcess;
+        return activatedProcess;
     }catch(err) {
         throw new Error("Could not create process for type : ", payload.type)
     }
