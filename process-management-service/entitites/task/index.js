@@ -2,16 +2,19 @@ const changeStatus = async (task, status) => {
     const validTransitions = task.validTransitions;
     const currStatus = task.status;
 
+    
     const newStatus = status === "NEXT" ? validTransitions[currStatus][0] : status;
 
+    console.log("CURR STATUS : ", currStatus , " NEW STATUS : ", newStatus)
     if(newStatus && validTransitions[currStatus][0] === newStatus) {
         task.status = newStatus;
         task.lastModifiedAt = new Date().toUTCString();
 
         const triggers = task.triggers[task.status];
-        const promiseList = triggers.forEach(async trigger => {
+        const promiseList = triggers.map(async trigger => {
             //place in event bus
             console.log(trigger, "-------------TRIGGERED--------")
+            return true;
         });
         await Promise.all(promiseList);
 
@@ -23,16 +26,24 @@ const changeStatus = async (task, status) => {
 }
 
 const activateTask = async task => {
+    console.log("ACTIVATING TASK")
     const initStatus = task.initStatus;
     task.status = initStatus;
 
+    console.log("TASK STATUS : ", task.status)
+
     const triggers = task.triggers[task.status];
-    const promiseList = triggers.forEach(async trigger => {
-        console.log(trigger);
+    const promiseList = triggers.map(async trigger => {
+        console.log(trigger)
+        // const triggerPayload = {
+        //     ...triggers,
+        //     process.customF
+        // }
     })
     await Promise.all(promiseList);
 
     task.lastModifiedAt = new Date().toUTCString();
+    console.log("Returning task : ", task)
     return task;
 }
 
@@ -47,8 +58,9 @@ const updateCustomFields = async (task,payload)=> {
         }
 
         const triggers = task.customDataUpdateTriggers;
-        const promiseList = triggers.forEach(async trigger => {
+        const promiseList = triggers.map(async trigger => {
             console.log(trigger);
+            return true;
         })
         await Promise.all(promiseList);
 
@@ -60,12 +72,13 @@ const updateCustomFields = async (task,payload)=> {
         }
 
         const triggers = task.customAttachmentTriggers;
-        const promiseList = triggers.forEach(async trigger => {
+        const promiseList = triggers.map(async trigger => {
             console.log(trigger);
+            return true;
         })
         await Promise.all(promiseList);
     }
-
+    task.customFields = newCustomFields;
     task.lastModifiedAt = new Date().toUTCString();
 
     return task;

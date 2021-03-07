@@ -25,9 +25,11 @@ const changeTaskStatusInStage = async (stage, taskId, status) => {
         }
     )
 
+    console.log("FOUND TASK : ", task)
     if(task) {
         const newTask = await changeStatus(task, status);
         let nextTask = await getNextTaskInStage(stage, taskId);
+        console.log("NEXT TASK : ", nextTask)
         if (nextTask && isTaskCompleted(newTask)) {
             nextTask = await activateTask(nextTask);
         }
@@ -37,17 +39,18 @@ const changeTaskStatusInStage = async (stage, taskId, status) => {
                 task => {
                     if(task.taskId === taskId)
                         return newTask;
-                    if(task.taskId === nextTask.taskId)
+                    if(nextTask && task.taskId === nextTask.taskId)
                         return nextTask;
                     return task;
                 }
             )
         }
-
+        console.log("NEW STAGE CREATED")
         if(isStageCompletable(newStage)) {
             newStage.status = "COMPLETED"
         }
         newStage.lastModifiedAt = new Date().toUTCString();
+        console.log("RETURNING NEWSTAGE : ", newStage)
         return newStage;
     } else {
         throw new Error("Incorrect task specified")
@@ -88,13 +91,16 @@ const activateTaskInStage = async (stage, taskId) => {
 
 
 const isStageCompletable = stage => {
+    let flag = true;
     stage.tasks.forEach(
         task => {
+            console.log("checking task status : ", task.status)
             if(task.status !== "COMPLETED")
-                return false;
+                flag = false;
         }
     )
-    return true;
+    console.log("stage is completable? ", flag)
+    return flag;
 }
 
 const updateCustomFieldsForTaskinStage = async (stage, taskId,payload)=> {
@@ -109,6 +115,7 @@ const updateCustomFieldsForTaskinStage = async (stage, taskId,payload)=> {
     )
 
     if(task) {
+        console.log("STAGE STATUS : ", stage.status)
         const newTask = await updateCustomFields(task, payload);
         let newStage = {
             ...stage,
@@ -120,10 +127,15 @@ const updateCustomFieldsForTaskinStage = async (stage, taskId,payload)=> {
                 }
             )
         }
+        console.log("TASKS IN STAGE : ")
+        console.log(stage.tasks);
 
+
+        console.log("STAGE STATUS  : ", stage.status)
         if(isStageCompletable(newStage)) {
             newStage.status = "COMPLETED"
         }
+        console.log("STAGE STATUS : ", stage.status)
         newStage.lastModifiedAt = new Date().toUTCString();
         return newStage;
     } else {
@@ -132,9 +144,11 @@ const updateCustomFieldsForTaskinStage = async (stage, taskId,payload)=> {
 }
 
 const activateStage = async stage => {
+    console.log("ACTIVATING STAGE")
     const initStatus = stage.initstatus || "PENDING";
     stage.status = initStatus;
 
+    console.log("STAGE STATUS : ", stage.status)
     const timeNow = new Date().toUTCString();
     stage.activatedAt = timeNow;
 
@@ -144,6 +158,7 @@ const activateStage = async stage => {
         ...stage,
         tasks : stage.tasks.map(
             task => {
+                console.log(task.taskId + "  " + firstTask.taskId);
                 if(task.taskId === firstTask.taskId)
                     return newTask;
                 return task;
@@ -151,14 +166,15 @@ const activateStage = async stage => {
         )
     }
 
-
-    const triggers = newStage.triggers[stage.status];
-    const promiseList = triggers.forEach(async trigger => {
-        console.log(trigger);
-    })
-    await Promise.all(promiseList);
+    console.log("NEW STAGE : ", newStage)
+    // const triggers = newStage.triggers[stage.status];
+    // const promiseList = triggers.forEach(async trigger => {
+    //     console.log(trigger);
+    // })
+    // await Promise.all(promiseList);
 
     newStage.lastModifiedAt = timeNow;
+    console.log("Returning : ");
     return newStage;
 }
 

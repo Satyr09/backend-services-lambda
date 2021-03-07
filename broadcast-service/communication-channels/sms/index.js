@@ -36,13 +36,15 @@ const { bodyTemplates } = require('../templates/email');
 const sendSMS = async (mobileNo, providerId, orderId) => {
     const acceptanceLink = "https://serviceprovider.goflexe.com/#/accept-order/"+orderId;
 
-    return client.messages.create({
-        body : bodyTemplates.NEW_ORDER_ACCEPTANCE_PROMPT + acceptanceLink,
-        from: '+14043342622',
-        to: mobileNo //'+917003625198'
-    }).then(
-         message => message.sid
-    )
+    if(mobileNo)
+        return client.messages.create({
+            body : bodyTemplates.NEW_ORDER_ACCEPTANCE_PROMPT + acceptanceLink,
+            from: '+14043342622',
+            to: mobileNo
+        }).then(
+            message => message.sid
+        )
+    return null;
 }
 
 module.exports = sendSMS;

@@ -3,6 +3,10 @@ const { getTemplate } = require("../../services/s3");
 const { changeTaskStatusInStage, isStageCompleted, activateStage, activateTaskInStage, updateCustomFieldsForTaskinStage } = require("../stage");
 const uuid = require("uuid")
 
+
+
+const timeNow = new Date().toUTCString();
+
 const getNextStageInProcess = async (process, stageId) => {
     let flag = false;
     let ans = null;
@@ -33,27 +37,34 @@ const changeTaskStatusInProcess = async (processId, stageId, taskId, status) => 
         }
     )
 
+    console.log("STAGE FOUND : " , stage)
+
     if(stage) {
         const newStage= await changeTaskStatusInStage(stage, taskId, status);
-        let nextStage = await getNextStageInProcess(stage, stageId);
+        let nextStage = await getNextStageInProcess(process, stageId);
+        console.log("NEXT STAGE : ", nextStage)
         if (nextStage && isStageCompleted(newStage)) {
             nextStage = await activateStage(nextStage);
         }
         let newProcess = {
             ...process,
-            stages : stage.tasks.map(
+            stages : process.stages.map(
                 stage => {
                     if(stage.stageId === stageId)
                         return newStage;
-                    if(stage.stageId === nextStage.stageId)
+                    if(nextStage && stage.stageId === nextStage.stageId)
                         return nextStage;
                     return stage;
                 }
             )
         }
 
+        console.log("UPDATED PROCESS GENERATED : ", newProcess)
         if(isProcessCompletable(newProcess)) {
             newProcess.status = "COMPLETED"
+            newProcess = updateProcessTimestamps(newProcess, true, false);
+        } else {
+            newProcess = updateProcessTimestamps(newProcess, false, false);
         }
         try{
             await updateProcess(newProcess);
@@ -96,6 +107,9 @@ const activateTaskInProcess = async (processId, stageId, taskId) => {
 
         if(isProcessCompletable(newProcess)) {
             newProcess.status = "COMPLETED"
+            newProcess = updateProcessTimestamps(newProcess, true, false);
+        } else {
+            newProcess = updateProcessTimestamps(newProcess, false, false);
         }
         try{
             await updateProcess(newProcess);
@@ -129,7 +143,7 @@ const updateCustomFieldsForTaskinProcess = async (processId, stageId, taskId,pay
             ...process,
             stages : process.stages.map(
                 stage => {
-                    if(stage.stageid === stageId)
+                    if(stage.stageId === stageId)
                         return newStage;
                     return stage;
                 }
@@ -138,6 +152,9 @@ const updateCustomFieldsForTaskinProcess = async (processId, stageId, taskId,pay
 
         if(isProcessCompletable(newProcess)) {
             newProcess.status = "COMPLETED"
+            newProcess = updateProcessTimestamps(newProcess, true, false);
+        } else {
+            newProcess = updateProcessTimestamps(newProcess, false, false);
         }
         try{
             await updateProcess(newProcess);
@@ -157,14 +174,13 @@ const createProcess = async payload => {
         processType : type
     });
 
-    const timeNow = new Date().toUTCString();
-
     const newProcess = {
         ...template,
         processId : uuid.v4(),
-        principal : payload.user,
-        createdAt : timeNow,
-        lastModifiedAt : timeNow,
+        principal : payload.principal,
+        processGroupId : payload.processGroupId,
+        dueDate: payload.dueDate,
+        customFields: {...payload.customFields}
     }
     newProcess.stages.forEach(
         stage => {
@@ -176,21 +192,25 @@ const createProcess = async payload => {
             )
         }
     )
+    console.log("New process is : ", newProcess)
 
     const initStage = newProcess.stages[0];
     const newStage = await activateStage(initStage);
 
-
+    console.log("ACTIVATED STAGE : " , newStage);
     let activatedProcess = {
-        ...process,
-        stages : process.stages.map(
+        ...newProcess,
+        stages : newProcess.stages.map(
             stage => {
-                if(stage.stageid === newStage.stageId)
+                console.log(stage.stageId + " --- " + newStage.stageId)
+                if(stage.stageId === newStage.stageId)
                     return newStage;
                 return stage;
             }
         )
     }
+    updateProcessTimestamps(activatedProcess, false, true);
+    console.log("Activated process is : " , activatedProcess)
     
     try {
         const res = await createNewProcess(activatedProcess);
@@ -210,8 +230,15 @@ const isProcessCompletable = process => {
     )
     return true;
 }
+const updateProcessTimestamps = (process, isComplete, isNew) => {
+    if(isNew)
+        process.createdAt = timeNow;
+    if(isComplete)
+        process.completedOn = timeNow;
+    process.lastModifiedAt = timeNow;
 
-
+    return process;
+}
 module.exports = {
     changeTaskStatusInProcess,
     activateTaskInProcess,

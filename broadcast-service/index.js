@@ -75,70 +75,88 @@ exports.handler = async function (event, context) {
                 console.log("Trying to send data : ", partner);
                 const attributes = partner.Attributes;
                 const phoneNumber = attributes.find(attribute => attribute.Name === "phone_number")
-                                    ? attributes.find(attribute => attribute.Name === "phone_number").Value : "+91100000000";// : "+917003625198";
+                                    ? attributes.find(attribute => attribute.Name === "phone_number").Value : null;
                 const email = attributes.find(attribute => attribute.Name === "email") ?
                                     attributes.find(attribute => attribute.Name === "email").Value : null;
 
                 const providerId = partner.Username;
-
-                const obj = {
-                    email,
-                    phoneNumber,
-                    userName : providerId
-                }
-                if(email)emailRecepients.push(email)
+                
+                if(email)
+                    emailRecepients.push(email)
                 phoneRecepients.push(phoneNumber)
                 receipients.push(providerId);
 
-                // const providerId = partner.phoneNumber || partner.email;
 
                 console.log(email, " ", phoneNumber, " ", providerId);
 
                 const orderId = customerOrder.OrderId || "123456789";
                 inAppReceipients.push(providerId)
+                let response  = null;
                 try{
-                    return await sendSMS(phoneNumber, providerId, orderId);
-                } catch(err) {console.log(err)}
+                    response = await sendSMS(phoneNumber, providerId, orderId);
+                } catch(err) {
+                    console.log("SMS Notifications for " , phoneNumber, " failed with error : ", err)
+                }
+                return response;
             }
         )
     )
-    const orderId = customerOrder.OrderId || "123456789"
-    const emailDeliveryInfo = await sendEmail(orderId,null,emailRecepients)
+    const orderId = customerOrder.OrderId;
+    try{
+        //Mail notifications-------------------------------------------------
+        try{
+            await sendEmail(orderId,null,emailRecepients)
+        } catch(err) {
+            console.log("Email notifications did not succeed completely." ,  err)
+        }
+
+        //In app notifications----------------------------------------------
+        try {
+            await Promise.all(
+                inAppReceipients.map(async inAppReceipient => {
+                    try {
+                        const inAppNotifResponse =  await sendInAppNotification(inAppReceipient, orderId);
+                        return inAppNotifResponse;
+                    } catch(err) {
+                        console.log("In app notification to ", inAppReceipient , " failed.")
+                        return null;
+                    }
+                })
+            )
+        } catch(err) {
+            console.log("In app notifications did not succeed completely, ", err.body)
+        }
 
 
-    await Promise.all(
-        inAppReceipients.map(async inAppReceipient => {
-            return await sendInAppNotification(inAppReceipient, orderId);
-        })
-    )
-    const databaseEntry = {
-        customerOrderId : customerOrder.OrderId,
-        broadcastOrderId : uuid.v4(),
-        receipients,
-        status : "PENDING"
+        //Creating entries in broadcast order table----------------------------------
+        const databaseEntry = {
+            customerOrderId : customerOrder.OrderId,
+            broadcastOrderId : uuid.v4(),
+            receipients,
+            status : "PENDING"
+        }
+        const dynamoDBParams = {
+            TableName : "BroadcastOrder",
+            Item : databaseEntry
+        }
+        const response = await DynamoDBClient.put(dynamoDBParams).promise();
+
+        console.log("RESPONSE FROM DATABASE : ", response)
+    }catch(err) {
+        console.log(err);
+    }finally{
+        const deleteMessageParams = {
+            QueueUrl: sqsQueueURL,
+            ReceiptHandle: record.receiptHandle
+        };
+        await sqs.deleteMessage(deleteMessageParams).promise();
+        console.log("Deleted messages")
     }
-    const dynamoDBParams = {
-        TableName : "BroadcastOrder",
-        Item : databaseEntry
-    }
-    const response = await DynamoDBClient.put(dynamoDBParams).promise();
-
-    console.log("RESPONSE FROM DATABASE : ", response)
-    returnData.push(emailDeliveryInfo)
-
-    const deleteMessageParams = {
-        QueueUrl: sqsQueueURL,
-        ReceiptHandle: record.receiptHandle
-    };
-    await sqs.deleteMessage(deleteMessageParams).promise();
+    console.log("Success!")
     context.succeed(returnData);
 }
 
 const sendInAppNotification = async (providerId, orderId) => {
-    const acceptanceLink = "http://localhost:3001/accept-order/" + `?orderId=${orderId}`;
-
-    const messageString = "A new order awaits you, click here to learn more or accept the order: "+ acceptanceLink;
-
     const socketParams = {
         FunctionName: "socket-send-message-handler",
         InvocationType: 'RequestResponse',

@@ -12,8 +12,13 @@ const getProcessById = async (processId) => {
         }
     };
 
-    const data = await documentClient.get(params).promise();
-    return data.Items
+    try{
+        const data = await documentClient.get(params).promise();
+        console.log(data)
+        return data.Item
+    }catch(err) {
+        console.log(err)
+    }
 }
 
 const createNewProcess = async process => {
@@ -23,19 +28,33 @@ const createNewProcess = async process => {
             ...process
         }
     }; 
-    const res = await documentClient.put(params).promise();
-    return res;
+    console.log("INSERTING INTO DATABASE ........")
+    try{
+        console.log("PARAMS " ,params)
+        const res = await documentClient.put(params).promise();
+        console.log("RESPONSE FROM DB : ", res)
+        return res;
+    }catch(err) {
+        console.log(err)
+    }
 }
 const updateProcess = async process => {
     const params = {
         TableName: awsConfigs.TableName,
         Item:{
             ...process,
-            lastUpdatedAt : new Date().toUTCString()
+            lastModifiedAt : new Date().toUTCString()
         }
     }
-    const res = await documentClient.put(params).promise();
-    return res;
+
+    try{
+        console.log("PARAMS " ,params)
+        const res = await documentClient.put(params).promise();
+        console.log("RESPONSE FROM DB : ", res)
+        return res;
+    }catch(err) {
+        console.log(err)
+    }
 }
 
 module.exports = {
