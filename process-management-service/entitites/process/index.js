@@ -178,7 +178,7 @@ const createProcess = async payload => {
         ...template,
         processId : uuid.v4(),
         principal : payload.principal,
-        processGroupId : payload.processGroupId,
+        processGroup : payload.processGroup,
         dueDate: payload.dueDate,
         customFields: {...payload.customFields}
     }
@@ -222,13 +222,24 @@ const createProcess = async payload => {
 }
 
 const isProcessCompletable = process => {
+    // process.stages.forEach(
+    //     stage => {
+    //         if(stage.status !== "COMPLETED")
+    //             return false;
+    //     }
+    // )
+    // return true;
+
+    let flag = true;
     process.stages.forEach(
         stage => {
+            console.log("checking task status : ", stage.status)
             if(stage.status !== "COMPLETED")
-                return false;
+                flag = false;
         }
     )
-    return true;
+    console.log("stage is completable? ", flag)
+    return flag;
 }
 const updateProcessTimestamps = (process, isComplete, isNew) => {
     if(isNew)
