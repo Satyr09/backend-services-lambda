@@ -207,8 +207,10 @@ const createProcess = async payload => {
                     return newStage;
                 return stage;
             }
-        )
+        ),
+        status : newProcess.initStatus
     }
+
     updateProcessTimestamps(activatedProcess, false, true);
     console.log("Activated process is : " , activatedProcess)
     
@@ -222,14 +224,6 @@ const createProcess = async payload => {
 }
 
 const isProcessCompletable = process => {
-    // process.stages.forEach(
-    //     stage => {
-    //         if(stage.status !== "COMPLETED")
-    //             return false;
-    //     }
-    // )
-    // return true;
-
     let flag = true;
     process.stages.forEach(
         stage => {
@@ -238,7 +232,7 @@ const isProcessCompletable = process => {
                 flag = false;
         }
     )
-    console.log("stage is completable? ", flag)
+    console.log("process is completable? ", flag)
     return flag;
 }
 const updateProcessTimestamps = (process, isComplete, isNew) => {

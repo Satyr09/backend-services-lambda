@@ -1,0 +1,6 @@
+h3 Welcome to GoFlexe!
+p We hope you will enjoy your time on the platform.
+br
+p In case of any questions, please do not hesitate to reach out to us!
+
+p In order to reach out to us, please send a mail to admin@goflexe.com

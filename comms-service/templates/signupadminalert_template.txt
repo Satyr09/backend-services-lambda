@@ -1,0 +1,3 @@
+h3 New signup occured
+
+p A new singup on the platform was observed at #{signupTimestamp} by user : #{userEmail} on the #{signupType} dashboard.

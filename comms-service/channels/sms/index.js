@@ -1,14 +1,15 @@
-const accountSid =  "ACcd882192b72dffc264ae951376006a07" ; //process.env.TWILIO_ACCOUNT_SID;
-const authToken = "7ae60c603a28ba92720017214e2e0434" ; //process.env.TWILIO_AUTH_TOKEN;
+const accountSid =  process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 const { getCompiledTextTemplate } = require('../../templates');
 const defaultSender = '+14043342622'
 
-const sendSMS = async (data, receipients, messageType = "BROADCAST_ORDER", sender = defaultSender) => {
+const sendSMS = async (data = {} , receipients, messageType = "BROADCAST_ORDER", sender = defaultSender) => {
     const acceptanceLink = "https://serviceprovider.goflexe.com/#/accept-order/"+data.orderId;
 
     const dynamicFields = {
-        acceptanceLink
+        acceptanceLink,
+        ...data
     }
     const message = getCompiledTextTemplate(dynamicFields, messageType)
     const errors = []

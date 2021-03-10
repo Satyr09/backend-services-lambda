@@ -1,37 +1,54 @@
 const sendEmail = require("./channels/email");
 const sendSMS = require("./channels/sms");
 
-const event =  {
-    type : "NOTIFICATION",
-    channels : [
-        {
-            channelName : "email",
-            receipients : [
-                "daipayan@goflexe.com"
-            ],
-            messageType : "BROADCAST_ORDER",
-            data : {
-                orderId : "1234"
-            }
-        },
-        {
-            channelName : "sms",
-            receipients : [
-                "+917003625198"
-            ],
-            messageType : "BROADCAST_ORDER",
-            data : {
-                orderId : "1234"
-            }
-        }
-    ]
+// const event =  {
+//     body : {
+//         // type : "NOTIFICATION",
+//         // channels : [
+//         //     {
+//         //         channelName : "email",
+//         //         receipients : [
+//         //             "daipayan@goflexe.com"
+//         //         ],
+//         //         messageType : "BROADCAST_ORDER",
+//         //         data : {
+//         //             orderId : "1234"
+//         //         }
+//         //     },
+//         //     {
+//         //         channelName : "sms",
+//         //         receipients : [
+//         //             "+917003625198"
+//         //         ],
+//         //         messageType : "BROADCAST_ORDER",
+//         //         data : {
+//         //             orderId : "1234"
+//         //         }
+//         //     }
+//         // ]
+//         type: "NOTIFICATION",
+//         channels : [
+//             {
+//                 channelName : "email",
+//                 receipients : [
+//                     "daipayan@goflexe.com"
+//                 ],
+//                 messageType : "SIGNUP_WELCOME",
+//                 data : {}
+//             }
+//         ]
+//     }
+    
+// }
+
+const channelMap = {
+    "email" : sendEmail,
+    "sms" : sendSMS
 }
-const context = {
-    fail : message => console.error(message)
-}
-//module.exports = async (event, context) => {
-const handle = async (event, context) => {
-    const payload = JSON.parse(event);
+
+exports.handler = async (event, context) => {
+    const payload = JSON.parse(event.body);
+    console.log(payload)
     if(!payload || !payload.type)
         context.fail("Payload is empty")
 
@@ -61,12 +78,3 @@ const handle = async (event, context) => {
     if(errors.length > 0)
         console.error("Something went wrong")
 }
-
-const channelMap = {
-    "email" : sendEmail,
-    "sms" : sendSMS
-}
-
-handle(JSON.stringify(event), context).then(
-    resp => console.log(resp)
-)
