@@ -22,29 +22,84 @@ const getNextStageInProcess = async (process, stageId) => {
     )
     return ans;
 }
-const bulkUpdateTaskStatus = async (tasks) => {
-    const errors = []
-    const responses = []
-    const promiseList = tasks.map(
-        async task => {
-            try {
-                const response = await changeTaskStatusInProcess(task.processId, task.stageId, task.taskId, task.status);
-                responses.push(response)
-                return response;
-            } catch(err) {
-                errors.push(err)
-                responses.push(null)
-                console.error(err);
-                return null;
-            }  
-        }
-    )
-    await Promise.all(promiseList);
-    if(errors.length > 0) {
-        throw new Error("Something went wrong : " , JSON.stringify(errors));
-    }
-    return responses;
+/**
+ * 
+ * @param {*} processId The id of the process to be updated
+ * @param {*} stageId The id of the stage to be updated
+ * @param {[{taskId, status}]} tasks An array of objects, each object contains the status and taskId attribute corresponding to the required updated.
+ * @returns The updated process.
+ */
+const bulkUpdateTaskStatus = async (processId, stageId, tasks) => {
+
+     const process = await getProcessById(processId);
+
+     if(!process)
+         throw new Error("Process not found");
+ 
+     const stage = process.stages.find(
+         stage => {
+             if(stage.stageId === stageId)
+                 return true;
+             return false;
+         }
+     )
+ 
+     console.log("STAGE FOUND : " , stage)
+
+     if(stage) {
+        let updatedStage = stage;
+        tasks.forEach(
+            async task => {
+                const taskId = task.taskId;
+                const status = task.status;
+                updatedStage = await changeTaskStatusInStage(updatedStage, taskId, status);
+            }
+        )
+         let nextStage = await getNextStageInProcess(process, stageId);
+         console.log("NEXT STAGE : ", nextStage)
+         if (nextStage && isStageCompleted(updatedStage)) {
+             nextStage = await activateStage(nextStage);
+         }
+         let newProcess = {
+             ...process,
+             stages : process.stages.map(
+                 stage => {
+                     if(stage.stageId === stageId)
+                         return updatedStage;
+                     if(nextStage && stage.stageId === nextStage.stageId)
+                         return nextStage;
+                     return stage;
+                 }
+             )
+         }
+ 
+         console.log("UPDATED PROCESS GENERATED : ", newProcess)
+         if(isProcessCompletable(newProcess)) {
+             newProcess.status = "COMPLETED"
+             newProcess = updateProcessTimestamps(newProcess, true, false);
+         } else {
+             newProcess = updateProcessTimestamps(newProcess, false, false);
+         }
+         try{
+             await updateProcess(newProcess);
+         }catch(err) {
+             throw new Error("Process could not be updated" + JSON.stringify(err));
+         }
+         return newProcess;
+     } else {
+         throw new Error("Incorrect stage specified")
+     }
 }
+
+
+/**
+ * 
+ * @param {uuid} processId the process to be updated
+ * @param {uuid} stageId the stage to be updated
+ * @param {uuid} taskId the task to be updated
+ * @param {string} status the next status, can be "NEXT" or any valid status
+ * @returns THe updated process
+ */
 const changeTaskStatusInProcess = async (processId, stageId, taskId, status) => {
 
     const process = await getProcessById(processId);

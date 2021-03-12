@@ -35,7 +35,7 @@ exports.handler = async (event, context) => {
         res = await createProcess(request.data);
         return formOKResponse(res);
       case "bulkUpdateTaskStatus":
-        res = await bulkUpdateTaskStatus(request.tasks)
+        res = await bulkUpdateTaskStatus(request.data.processId, request.data.stageId, request.data.tasks)
         return formOKResponse(res)
       case "changeTaskStatus":
         res = await changeTaskStatusInProcess(request.data.processId, request.data.stageId, request.data.taskId, request.data.status);

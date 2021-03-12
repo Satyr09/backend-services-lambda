@@ -8,7 +8,7 @@ const getNextTaskInStage = async (stage, taskId, taskNumber) => {
         task => {
             if(task.taskId === taskId)
                 flag = true;
-            else if(flag == true) {
+            else if(flag == true && task.status === "INACTIVE") {
                 flag = false;
                 ans = task;
             }

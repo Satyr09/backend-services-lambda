@@ -1,0 +1,1327 @@
+{
+	"processId": "",
+	"processType": "TRACKING",
+	"status":"INACTIVE",
+	"initStatus" :"PENDING",
+	"processDescription": "Tracking of an order",
+	"stagesDefined": 5,
+	"stagesCompleted": 0,
+	"processGroup": "test",
+	"preUpdate": [],
+	"postUpdate": [],
+	"customFields" : {
+		"customerId" : "",
+		"serviceProviderId": ""
+	},
+	"stages": [
+		{
+			"name": "PRE_PICKUP",
+			"stageId": "",
+			"stageLabel": "Truck Assignment Form",
+			"stageType": "individual-task",
+			"number": 1,
+			"description": "Customer order accepted by service provider.",
+			"status":"INACTIVE",
+			"initStatus" :"PENDING",
+			"triggers" : {
+				"PENDING" : [],
+				"COMPLETED" : []
+			},
+			"tasks": [
+				{
+					"number": 1,
+					"name": "ASSET_ALLOCATION",
+					"taskId": "",
+					"taskType": "pre-decided",
+					"taskLabel": "",
+					"taskOwner": "serviceProvider",
+					"status": "INACTIVE",
+					"initStatus": "PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+                {
+					"number": 2,
+					"name": "TEST_TASK_TO_BE_DELETED_NUM_2",
+					"taskId": "",
+					"taskType": "pre-decided",
+					"taskLabel": "",
+					"taskOwner": "serviceProvider",
+					"status": "INACTIVE",
+					"initStatus": "PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+                {
+					"number": 2,
+					"name": "TEST_TASK_TO_BE_DELETED_2",
+					"taskId": "",
+					"taskType": "pre-decided",
+					"taskLabel": "",
+					"taskOwner": "serviceProvider",
+					"status": "INACTIVE",
+					"initStatus": "PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+                {
+					"number": 3,
+					"name": "TEST_TASK_TO_BE_DELETED_3",
+					"taskId": "",
+					"taskType": "pre-decided",
+					"taskLabel": "",
+					"taskOwner": "serviceProvider",
+					"status": "INACTIVE",
+					"initStatus": "PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_PICKUP",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "IN_TRANSIT_PICKUP",
+			"stageId": "",
+			"stageType": "individual-task",
+			"stageLabel": "Driver Left for Pickup",
+			"number": 2,
+			"description": "Driver left for order pickup",
+			"status":"INACTIVE",
+			"initStatus" :"PENDING",
+			"triggers" : {
+				"PENDING" : [],
+				"COMPLETED" : []
+			},
+			"tasks": [
+				{
+					"number": 1,
+					"name": "DRIVER_OTW",
+					"taskType": "checkbox",
+					"taskLabel": "Driver has left for pickup.",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+                {
+					"number": 1,
+					"name": "TEST_TASK_STAGE_2_1",
+					"taskType": "checkbox",
+					"taskLabel": "Driver has left for pickup.",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+                {
+					"number": 2,
+					"name": "TEST_TASK_STAGE_2_2",
+					"taskType": "checkbox",
+					"taskLabel": "Driver has left for pickup.",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "ARRIVED_AT_PICKUP_LOCATION",
+			"stageId": "",
+			"stageLabel": "Pickup in Progress",
+			"stageType": "individual-task",
+			"number": 3,
+			"description": "Driver has reached pickup location",
+			"status":"INACTIVE",
+			"initStatus" :"PENDING",
+			"triggers" : {
+				"PENDING" : [],
+				"COMPLETED" : []
+			},
+			"tasks": [
+				{
+					"number": 1,
+					"name": "ARRIVED_AT_PICKUP",
+					"taskType": "checkbox",
+					"taskLabel": "Arrived at pickup location.",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "PICKUP_CHECKLIST",
+			"stageLabel": "Pickup Checklist",
+			"stageType": "linked-tasks",
+			"stageId": "",
+			"number": 4,
+			"description": "Checklist to be completed by truck owner at after pickup.",
+			"status":"INACTIVE",
+			"initStatus" :"PENDING",
+			"triggers" : {
+				"PENDING" : [],
+				"COMPLETED" : []
+			},
+			"tasks": [
+				{
+					"number": 1,
+					"name": "NUMBER_OF_UNIT",
+					"taskType": "input-number",
+					"taskLabel": "Number of Units",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 2,
+					"name": "SPECIAL_INSTRUCTION",
+					"taskType": "input-text",
+					"taskLabel": "Special Instruction",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 3,
+					"name": "PRODUCT_PACKED",
+					"taskType": "checkbox",
+					"taskLabel": "Product Packed Properly",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 4,
+					"name": "PRODUCT_DAMAGED",
+					"taskType": "checkbox",
+					"taskLabel": "Product Damaged",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 5,
+					"name": "UPLOAD_LOADED_TRUCK_PHOTO",
+					"taskType": "input-attachment",
+					"taskLabel": "Upload Photo of Loaded Truck : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 6,
+					"name": "DRIVER_DOCUMENT_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Signed Document by Driver/Executive : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 7,
+					"name": "CUSTOMER_DOCUMENT_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Signed Document by Customer : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 8,
+					"name": "SOURCE_COPY_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Source Copy : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},		
+				{
+					"number": 9,
+					"name": "PICKUP_COMPLETED",
+					"taskType": "submit-button",
+					"taskLabel": "Pickup Completed",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "ARRIVED_AT_DROP_LOCATION",
+			"stageId": "",
+			"stageLabel": "Delivery in Progress",
+			"stageType": "individual-task",
+			"number": 5,
+			"description": "Driver arrived at drop location",
+			"status":"INACTIVE",
+			"initStatus" :"PENDING",
+			"triggers" : {
+				"PENDING" : [],
+				"COMPLETED" : []
+			},
+			"tasks": [
+				{
+					"number": 1,
+					"name": "ARRIVED_AT_DROP_LOCATION",
+					"taskId": "",
+					"taskType": "checkbox",
+					"taskLabel": "Arrived at drop location.",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [
+
+					],
+					"customAttachmentTriggers" : [
+
+					],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "DELIVERY_CHECKLIST",
+			"stageLabel": "Delivery Checklist",
+			"stageType": "linked-tasks",
+			"stageId": "",
+			"number": 6,
+			"description": "Checklist to be completed by truck owner at after pickup.",
+			"status":"INACTIVE",
+			"initStatus" :"PENDING",
+			"triggers" : {
+				"PENDING" : [],
+				"COMPLETED" : []
+			},
+			"tasks": [
+				{
+					"number": 1,
+					"name": "PRODUCT_PILFERAGE_IN_TRANSIT",
+					"taskType": "checkbox",
+					"taskLabel": "Product Pilerage in transit",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 2,
+					"name": "PRODUCT_DAMAGE_IN_TRANSIT",
+					"taskType": "checkbox",
+					"taskLabel": "Product Damage In Transit",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 3,
+					"name": "DAMAGED_PRODUCT_COUNT",
+					"taskType": "input-number",
+					"taskLabel": "Number of Damaged Product : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 4,
+					"name": "UPLOAD_DAMAGED_PRODUCT_PHOTO",
+					"taskType": "input-attachment",
+					"taskLabel": "Upload Photo of Damaged Product : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 5,
+					"name": "UPLOAD_UNLOADED_TRUCK_PHOTO",
+					"taskType": "input-attachment",
+					"taskLabel": "Upload Photo of Un-Loaded Truck : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 6,
+					"name": "DRIVER_DOCUMENT_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Signed Document by Driver/Executive : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 7,
+					"name": "CUSTOMER_DOCUMENT_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Signed Document by Customer : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 9,
+					"name": "ACCOUNT_COPY_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Account Copy : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 8,
+					"name": "CONSIGNORS_COPY_UPLOAD",
+					"taskType": "input-attachment",
+					"taskLabel": "Consignors copy : ",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				},
+				{
+					"number": 9,
+					"name": "SHIPMENT_DELIVERED",
+					"taskType": "submit_button",
+					"taskLabel": "Shipment Delivered",
+					"taskId": "",
+					"taskOwner": "assetOwner",
+					"status":"INACTIVE",
+					"initStatus" :"PENDING",
+					"dependsOn": [],
+					"customFields" : {
+						"data" : {},
+						"attachments" : {}
+					},
+					"validTransitions" : {
+						"INACTIVE" : ["PENDING"],
+						"PENDING" : ["COMPLETED"],
+						"COMPLETED" : []
+					},
+					"customDataUpdateTriggers" : [],
+					"customAttachmentTriggers" : [],
+					"triggers" : {
+						"PENDING" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						],
+						"COMPLETED" : [
+							{
+								"triggerType" : "NOTIFICATION",
+								"processType": "TRACKING",
+								"triggerSource" : "PRE_TRANSIT",
+								"taskType": "ASSET_ALLOCATION",
+								"triggerTarget": ""
+							}
+						]
+					}
+				}
+			]
+		}
+	]
+}
+
