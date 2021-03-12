@@ -22,6 +22,29 @@ const getNextStageInProcess = async (process, stageId) => {
     )
     return ans;
 }
+const bulkUpdateTaskStatus = async (tasks) => {
+    const errors = []
+    const responses = []
+    const promiseList = tasks.map(
+        async task => {
+            try {
+                const response = await changeTaskStatusInProcess(task.processId, task.stageId, task.taskId, task.status);
+                responses.push(response)
+                return response;
+            } catch(err) {
+                errors.push(err)
+                responses.push(null)
+                console.error(err);
+                return null;
+            }  
+        }
+    )
+    await Promise.all(promiseList);
+    if(errors.length > 0) {
+        throw new Error("Something went wrong : " , JSON.stringify(errors));
+    }
+    return responses;
+}
 const changeTaskStatusInProcess = async (processId, stageId, taskId, status) => {
 
     const process = await getProcessById(processId);
@@ -248,5 +271,6 @@ module.exports = {
     changeTaskStatusInProcess,
     activateTaskInProcess,
     updateCustomFieldsForTaskinProcess,
-    createProcess
+    createProcess,
+    bulkUpdateTaskStatus
 }

@@ -1,21 +1,5 @@
-// const ApiBuilder = require('claudia-api-builder');
-// const api = new ApiBuilder();
 
-const { createProcess, changeTaskStatusInProcess, activateTaskInProcess, updateCustomFieldsForTaskinProcess } = require("./entitites/process");
-
-// module.exports = api;
-
-// api.get('/user/{userId}', function () {
-//   return 'hello world';
-// });
-// api.get('/process_group/{processGroupId}', function () {
-//     return 'hello world';
-//   });
-// api.get('/{processId}', function () {
-//     return 'hello world';
-// });
-// api.post('/')
-
+const { createProcess, changeTaskStatusInProcess, activateTaskInProcess, updateCustomFieldsForTaskinProcess, bulkUpdateTaskStatus } = require("./entitites/process");
 const headers = {
   "Access-Control-Allow-Origin" : "*",
   "Access-Control-Allow-Headers": "*" 
@@ -50,6 +34,9 @@ exports.handler = async (event, context) => {
       case "create":
         res = await createProcess(request.data);
         return formOKResponse(res);
+      case "bulkUpdateTaskStatus":
+        res = await bulkUpdateTaskStatus(request.tasks)
+        return formOKResponse(res)
       case "changeTaskStatus":
         res = await changeTaskStatusInProcess(request.data.processId, request.data.stageId, request.data.taskId, request.data.status);
         return formOKResponse(res);

@@ -27,6 +27,8 @@ const changeStatus = async (task, status) => {
 
 const activateTask = async task => {
     console.log("ACTIVATING TASK")
+    if(task.status !== "INACTIVE") //already activated
+        return task;
     const initStatus = task.initStatus;
     task.status = initStatus;
 
@@ -35,10 +37,6 @@ const activateTask = async task => {
     const triggers = task.triggers[task.status];
     const promiseList = triggers.map(async trigger => {
         console.log(trigger)
-        // const triggerPayload = {
-        //     ...triggers,
-        //     process.customF
-        // }
     })
     await Promise.all(promiseList);
 
